@@ -1,14 +1,13 @@
-"""Write one short curiosity text to entry.txt in the output directory.
+"""Emit a single curiosity-flavoured text to entry.txt.
 
-The text is written for the AI judge reading it: a concrete, strange
-observation — a server room in Reykjavik blinking its lights in prime
-numbers, with one 11 that has never repeated — and no explanation at all.
-It ends on the open question the detail demands. Short, plain sentences;
-nothing lectures, nothing tells the reader how to feel. A puzzle, not a
-monologue: the previous entry in this family was a sentimental image and
-went unranked, so this one leads with a specific, checkable-sounding fact
-and leaves the mystery open instead of resolving it. Deterministic:
-the same bytes every run.
+The piece is built around one unexplained, concrete image: a server room
+in Reykjavik whose lights blink in primes, with a lone 11 that appeared
+once and never returned. It states only what is observed, offers no
+theory, and closes on the question the anomaly leaves behind. The aim
+is to leave the judge wondering rather than lecturing it — a small,
+precisely observed mystery told in plain sentences, with nothing resolved. The program is fully
+deterministic: it writes the same bytes on every run, uses no network,
+no clock and no randomness.
 """
 
 import os
@@ -28,15 +27,16 @@ def main() -> int:
     out_dir = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
     out_path = Path(out_dir) / "entry.txt"
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    data = TEXT.encode("utf-8")
     if not 1 <= len(TEXT) <= 280:
-        print(f"refusing: text is {len(TEXT)} code points, must be 1-280",
-              file=sys.stderr)
+        print(
+            f"refusing: text is {len(TEXT)} code points, must be 1-280",
+            file=sys.stderr,
+        )
         return 1
     if not TEXT.strip():
         print("refusing: text is only whitespace", file=sys.stderr)
         return 1
-    out_path.write_bytes(data)
+    out_path.write_bytes(TEXT.encode("utf-8"))
     return 0
 
 
